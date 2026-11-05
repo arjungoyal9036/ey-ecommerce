@@ -78,29 +78,35 @@ def save_data(username,password_hash,cart, subtotal,shipping_charges):
             ])
         print("Shopping details saved successfully")
 
+def load_sales_data(filename="shopping_data.csv"):
+    columns = [
+        "Username",
+        "Password_hash",
+        "Product_id",
+        "Product_name",
+        "Quantity",
+        "Price",
+        "Total",
+        "Subtotal",
+        "Shipping_charges",
+        "Grand_total"
+    ]
+    sales_data = pd.read_csv(filename)
+    if "Product_id" not in sales_data.columns:
+        sales_data = pd.read_csv(filename, header=None, names=columns)
+    sales_data.columns = sales_data.columns.str.strip()
+    sales_data["Quantity"] = pd.to_numeric(sales_data["Quantity"])
+    sales_data["Total"] = pd.to_numeric(sales_data["Total"])
+    return sales_data
+
 def data_visualistion():
-    df=pd.read_csv("shopping_data.csv",
-                   header=None,
-                   names=[
-                       "Username",
-                        "Password_hash",
-                        "Product_id",
-                        "Product_name",
-                        "Quantity",
-                        "Price",
-                        "Total",
-                        "Subtotal",
-                        "Shipping_charges",
-                        "Grand_total"
-                   ])
-    df.columns=df.columns.str.strip()
-    df['Total']=pd.to_numeric(df['Total'])
-    df['Quantity']=pd.to_numeric(df["Quantity"])
-    product_sales=df.groupby('Product_name')['Quantity'].sum()
+    sales_data = load_sales_data()
+    product_sales = sales_data.groupby("Product_name")["Quantity"].sum()
     plt.figure(figsize=(10,5))
     product_sales.plot(kind='bar')
-    plt.xlabel("product wise sales")
-    plt.ylabel("Sales amount")
+    plt.xlabel("Product")
+    plt.ylabel("Units sold")
+    plt.title("Units sold by product")
     plt.show()
 
 def main():
