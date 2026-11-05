@@ -16,8 +16,16 @@ data={
 df=pd.DataFrame(data)
 print("Original Product Catalog:")
 print(df)
-def Catalogue():
-    print(df[['product_name','product_id']])
+def Catalogue(category=None):
+    products = df if category is None else search_category(category)
+    if products.empty:
+        print("No products found in that category")
+    else:
+        print(products[['product_name', 'product_id']])
+
+def search_category(category):
+    normalized_category = category.strip().casefold()
+    return df[df['category'].str.casefold() == normalized_category].copy()
 
 def search_product(product_id):
     res=df[df['product_id']==product_id]
@@ -109,7 +117,8 @@ def main():
     password_hash=user_login(username,password)
     if password_hash is None:
         return
-    Catalogue()
+    category = input("Filter by category (press Enter to show all): ").strip()
+    Catalogue(category or None)
     a = int(input("Enter the product_id"))
     print(search_product(a))
     b = True
