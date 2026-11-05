@@ -27,9 +27,29 @@ def search_product(product_id):
         return res
 
 def shopping_cart(product_ids,quantity):
-    cart=df[df['product_id'].isin(product_ids)].copy()
-    cart['quantity']=quantity
-    return cart
+    if len(product_ids) != len(quantity):
+        raise ValueError("Each product must have a matching quantity")
+
+    cart_rows = []
+    requested_by_product = {}
+    for product_id, item_quantity in zip(product_ids, quantity):
+        if not isinstance(item_quantity, int) or item_quantity <= 0:
+            raise ValueError("Quantities must be positive integers")
+        product_matches = df[df['product_id'] == product_id]
+        if product_matches.empty:
+            raise ValueError(f"Product {product_id} was not found")
+
+        product = product_matches.iloc[0].copy()
+        requested_quantity = requested_by_product.get(product_id, 0) + item_quantity
+        if requested_quantity > product['Stock_count']:
+            raise ValueError(
+                f"Only {product['Stock_count']} units of {product['product_name']} are in stock"
+            )
+        requested_by_product[product_id] = requested_quantity
+        product['quantity'] = item_quantity
+        cart_rows.append(product)
+
+    return pd.DataFrame(cart_rows).reset_index(drop=True)
 
 def shipping_service(subtotal):
     shipping=np.where(subtotal>=300,0,100)
