@@ -33,8 +33,16 @@ def shopping_cart(product_ids,quantity):
 
 def shipping_service(subtotal):
     shipping=np.where(subtotal>=300,0,100)
-    print("shipping_charges: ",shipping)
     return int(shipping)
+
+def checkout_summary(cart):
+    subtotal = (cart['price'] * cart['quantity']).sum()
+    shipping_charges = shipping_service(subtotal)
+    return {
+        "subtotal": subtotal,
+        "shipping_charges": shipping_charges,
+        "grand_total": subtotal + shipping_charges
+    }
 
 def user_login(username,password):
     if username=="" or password=="":
@@ -130,12 +138,20 @@ def main():
         quantity
     )
     cart['total']=cart['price']*cart['quantity']
-    subt=cart['total'].sum()
-    shipping_charges=shipping_service(subt)
+    summary = checkout_summary(cart)
     print("cart")
     print(cart)
-    print(np.sum([subt,shipping_charges]))
-    save_data(username,password_hash,cart,subt,shipping_charges)
+    print("Order summary")
+    print(f"Subtotal: ${summary['subtotal']:.2f}")
+    print(f"Shipping: ${summary['shipping_charges']:.2f}")
+    print(f"Grand total: ${summary['grand_total']:.2f}")
+    save_data(
+        username,
+        password_hash,
+        cart,
+        summary['subtotal'],
+        summary['shipping_charges']
+    )
     s=input("Do u want to visualise the data (y/n)")
     if(s.lower()=="y"):
         data_visualistion()
