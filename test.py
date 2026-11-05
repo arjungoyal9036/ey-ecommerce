@@ -16,8 +16,16 @@ data={
 df=pd.DataFrame(data)
 print("Original Product Catalog:")
 print(df)
-def Catalogue():
-    print(df[['product_name','product_id']])
+def Catalogue(category=None):
+    products = df if category is None else search_category(category)
+    if products.empty:
+        print("No products found in that category")
+    else:
+        print(products[['product_name', 'product_id']])
+
+def search_category(category):
+    normalized_category = category.strip().casefold()
+    return df[df['category'].str.casefold() == normalized_category].copy()
 
 def search_product(product_id):
     res=df[df['product_id']==product_id]
@@ -29,26 +37,16 @@ def search_product(product_id):
 def shopping_cart(product_ids,quantity):
     if len(product_ids) != len(quantity):
         raise ValueError("Each product must have a matching quantity")
+    if any(not isinstance(item_quantity, int) or item_quantity <= 0 for item_quantity in quantity):
+        raise ValueError("Quantities must be positive integers")
+    if any(product_id not in df['product_id'].values for product_id in product_ids):
+        raise ValueError("One or more product IDs were not found")
 
     cart_rows = []
-    requested_by_product = {}
     for product_id, item_quantity in zip(product_ids, quantity):
-        if not isinstance(item_quantity, int) or item_quantity <= 0:
-            raise ValueError("Quantities must be positive integers")
-        product_matches = df[df['product_id'] == product_id]
-        if product_matches.empty:
-            raise ValueError(f"Product {product_id} was not found")
-
-        product = product_matches.iloc[0].copy()
-        requested_quantity = requested_by_product.get(product_id, 0) + item_quantity
-        if requested_quantity > product['Stock_count']:
-            raise ValueError(
-                f"Only {product['Stock_count']} units of {product['product_name']} are in stock"
-            )
-        requested_by_product[product_id] = requested_quantity
+        product = df[df['product_id'] == product_id].iloc[0].copy()
         product['quantity'] = item_quantity
         cart_rows.append(product)
-
     return pd.DataFrame(cart_rows).reset_index(drop=True)
 
 def shipping_service(subtotal):
@@ -98,29 +96,35 @@ def save_data(username,password_hash,cart, subtotal,shipping_charges):
             ])
         print("Shopping details saved successfully")
 
+def load_sales_data(filename="shopping_data.csv"):
+    columns = [
+        "Username",
+        "Password_hash",
+        "Product_id",
+        "Product_name",
+        "Quantity",
+        "Price",
+        "Total",
+        "Subtotal",
+        "Shipping_charges",
+        "Grand_total"
+    ]
+    sales_data = pd.read_csv(filename)
+    if "Product_id" not in sales_data.columns:
+        sales_data = pd.read_csv(filename, header=None, names=columns)
+    sales_data.columns = sales_data.columns.str.strip()
+    sales_data["Quantity"] = pd.to_numeric(sales_data["Quantity"])
+    sales_data["Total"] = pd.to_numeric(sales_data["Total"])
+    return sales_data
+
 def data_visualistion():
-    df=pd.read_csv("shopping_data.csv",
-                   header=None,
-                   names=[
-                       "Username",
-                        "Password_hash",
-                        "Product_id",
-                        "Product_name",
-                        "Quantity",
-                        "Price",
-                        "Total",
-                        "Subtotal",
-                        "Shipping_charges",
-                        "Grand_total"
-                   ])
-    df.columns=df.columns.str.strip()
-    df['Total']=pd.to_numeric(df['Total'])
-    df['Quantity']=pd.to_numeric(df["Quantity"])
-    product_sales=df.groupby('Product_name')['Quantity'].sum()
+    sales_data = load_sales_data()
+    product_sales = sales_data.groupby("Product_name")["Quantity"].sum()
     plt.figure(figsize=(10,5))
     product_sales.plot(kind='bar')
-    plt.xlabel("product wise sales")
-    plt.ylabel("Sales amount")
+    plt.xlabel("Product")
+    plt.ylabel("Units sold")
+    plt.title("Units sold by product")
     plt.show()
 
 def main():
@@ -129,7 +133,8 @@ def main():
     password_hash=user_login(username,password)
     if password_hash is None:
         return
-    Catalogue()
+    category = input("Filter by category (press Enter to show all): ").strip()
+    Catalogue(category or None)
     a = int(input("Enter the product_id"))
     print(search_product(a))
     b = True
