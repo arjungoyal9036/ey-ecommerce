@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="728" viewBox="0 0 700 728">
+  <rect width="700" height="728" fill="#e7e8dc"/>
+  <circle cx="550" cy="142" r="220" fill="#d7ddc9"/>
+  <circle cx="112" cy="635" r="248" fill="#d9ddcf"/>
+  <ellipse cx="355" cy="568" rx="178" ry="28" fill="#a9ad9e" opacity=".3"/>
+  <path d="M288 231v-71m119 71v-71" fill="none" stroke="#8f9188" stroke-linecap="round" stroke-width="16"/>
+  <rect x="198" y="215" width="304" height="323" rx="75" fill="#f3f1e7"/>
+  <rect x="217" y="233" width="266" height="287" rx="61" fill="#fffdf5"/>
+  <path d="M277 306c0-19 15-34 34-34h79c19 0 34 15 34 34v86c0 19-15 34-34 34h-79c-19 0-34-15-34-34z" fill="#c4ee76"/>
+  <path d="m349 310-39 49h32l-7 36 42-53h-32z" fill="#42483b"/>
+  <path d="M349 537v52c0 27 22 49 49 49h34c29 0 53 24 53 53" fill="none" stroke="#777c6c" stroke-linecap="round" stroke-width="16"/>
+  <circle cx="485" cy="690" r="9" fill="#777c6c"/>
+  <text x="350" y="479" fill="#777b70" font-family="Arial, sans-serif" font-size="16" font-weight="700" letter-spacing="3" text-anchor="middle">GOOD CHARGE</text>
+</svg>

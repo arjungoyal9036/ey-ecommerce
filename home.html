@@ -1,58 +1,124 @@
-
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="en">
 <head>
-    <title>Home Page</title>
-    <style>
-        body {
-            margin: 0;
-            font-family: Arial;
-            background-color: #f2f2f2;
-            text-align: center;
-        }
-
-        nav {
-            background-color: #333;
-            padding: 15px;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            margin: 15px;
-        }
-
-        .content {
-            margin-top: 100px;
-        }
-
-        button {
-            padding: 10px 20px;
-            background-color: blue;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-    </style>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#f7f6f2">
+    <meta name="description" content="Thoughtful tech and everyday essentials, selected to make your day a little better.">
+    <title>Good Goods — Thoughtful things, every day</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="app.js" defer></script>
 </head>
-
 <body>
+    <div class="announcement">
+        <p>Good things, delivered free on orders over $300 <span aria-hidden="true">✦</span></p>
+    </div>
 
-<nav>
-    <a href="home.html">Home</a>
-    <a href="signup.html">Sign Up</a>
-    <a href="login.html">Login</a>
-</nav>
+    <header class="site-header">
+        <a class="brand" href="home.html" aria-label="Good Goods home"><span class="brand-mark">g.</span> good goods</a>
+        <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+            <a href="#shop" data-nav-category="All">Shop all</a>
+            <a href="#shop" data-nav-category="Electronics">Electronics</a>
+            <a href="#shop" data-nav-category="Accessories">Accessories</a>
+        </nav>
+        <div class="header-actions">
+            <a class="account-link" href="login.html">Your account</a>
+            <button class="cart-button" id="open-cart" type="button" aria-label="Open shopping bag, 0 items">
+                <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M5 8h14l1 12H4L5 8Z"></path><path d="M9 9V6a3 3 0 0 1 6 0v3"></path></svg>
+                <span>Bag</span><span class="cart-count" id="cart-count">0</span>
+            </button>
+            <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Open navigation" aria-expanded="false" aria-controls="main-nav">
+                <span></span><span></span>
+            </button>
+        </div>
+    </header>
 
-<div class="content">
-    <h1>Welcome to Our Website!</h1>
-    <p>You have successfully reached the home page.</p>
+    <main>
+        <section class="hero" aria-labelledby="hero-title">
+            <div class="hero-copy">
+                <p class="eyebrow"><span class="eyebrow-dot"></span> A little more everyday magic</p>
+                <h1 id="hero-title">Good things.<br><span>Good days.</span></h1>
+                <p class="hero-description">Useful, beautiful tech and everyday essentials. Picked with care, made to fit your life.</p>
+                <a class="button button-dark" href="#shop">Find your next favorite <span aria-hidden="true">↗</span></a>
+                <div class="hero-note"><span class="hero-note-mark" aria-hidden="true">✳</span><span>Thoughtful picks for the everyday</span></div>
+            </div>
+            <div class="hero-art" aria-label="Featured wireless headphones">
+                <div class="hero-art-top"><span>THE EVERYDAY EDIT</span><span>NO. 001</span></div>
+                <div class="hero-orbit orbit-one"></div>
+                <div class="hero-orbit orbit-two"></div>
+                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&amp;fit=crop&amp;w=900&amp;q=85" alt="Sculptural wireless headphones in warm studio light">
+                <div class="hero-art-caption"><span>For the little in-between moments.</span><span class="caption-arrow" aria-hidden="true">↗</span></div>
+                <span class="hero-sticker" aria-hidden="true">GOOD<br>CHOICE<br>✳</span>
+            </div>
+        </section>
 
-    <button onclick="location.href='login.html'">
-        Logout
-    </button>
-</div>
+        <section class="benefits" aria-label="Why shop Good Goods">
+            <div><span class="benefit-icon" aria-hidden="true">✳</span><span><strong>Picked with purpose</strong><small>Everyday favorites, no filler</small></span></div>
+            <div><span class="benefit-icon" aria-hidden="true">↗</span><span><strong>Free shipping over $300</strong><small>A little extra goodness, on us</small></span></div>
+            <div><span class="benefit-icon" aria-hidden="true">♡</span><span><strong>Easy to explore</strong><small>Browse and shop at your pace</small></span></div>
+        </section>
 
+        <section class="shop-section" id="shop" aria-labelledby="shop-title">
+            <div class="section-heading">
+                <div>
+                    <p class="eyebrow">The good stuff</p>
+                    <h2 id="shop-title">A few things we love.</h2>
+                </div>
+                <label class="search-box">
+                    <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="10.8" cy="10.8" r="6.8"></circle><path d="m16 16 5 5"></path></svg>
+                    <input id="product-search" type="search" placeholder="Find something good" autocomplete="off" aria-label="Search products">
+                    <kbd>/</kbd>
+                </label>
+            </div>
+
+            <div class="shop-toolbar">
+                <div class="category-filters" role="group" aria-label="Filter by category">
+                    <button class="filter-chip is-active" type="button" data-category="All" aria-pressed="true">Everything <span id="all-count"></span></button>
+                    <button class="filter-chip" type="button" data-category="Electronics" aria-pressed="false">Electronics</button>
+                    <button class="filter-chip" type="button" data-category="Accessories" aria-pressed="false">Accessories</button>
+                </div>
+                <label class="sort-control">Sort by
+                    <select id="sort-products" aria-label="Sort products">
+                        <option value="featured">Featured</option>
+                        <option value="price-low">Price: low to high</option>
+                        <option value="price-high">Price: high to low</option>
+                        <option value="name">Name</option>
+                    </select>
+                </label>
+            </div>
+
+            <div class="product-grid" id="product-grid" aria-live="polite"></div>
+            <p class="empty-state" id="empty-state" hidden>Nothing here just yet. Try another search.</p>
+        </section>
+
+        <section class="newsletter">
+            <div class="newsletter-spark" aria-hidden="true">✳</div>
+            <div><p class="eyebrow">A good note, now and then</p><h2>Make room for good things.</h2><p>New finds, little ideas, and the occasional very good deal.</p></div>
+            <a class="button button-light" href="signup.html">Get to know us <span aria-hidden="true">↗</span></a>
+        </section>
+    </main>
+
+    <footer class="site-footer">
+        <a class="brand brand-footer" href="home.html"><span class="brand-mark">g.</span> good goods</a>
+        <p>Thoughtful things for wherever the day takes you.</p>
+        <div class="footer-links"><a href="login.html">Account</a><a href="#shop">Shop</a><a href="signup.html">About this demo</a></div>
+        <small>© 2026 Good Goods. A little more everyday magic.</small>
+    </footer>
+
+    <div class="drawer-backdrop" id="drawer-backdrop" hidden></div>
+    <aside class="cart-drawer" id="cart-drawer" role="dialog" aria-modal="true" aria-labelledby="cart-title" aria-hidden="true" inert>
+        <div class="drawer-heading"><div><p class="eyebrow">Your good finds</p><h2 id="cart-title">Your bag <span id="drawer-count">(0)</span></h2></div><button class="icon-button" id="close-cart" type="button" aria-label="Close shopping bag">×</button></div>
+        <div class="cart-items" id="cart-items"></div>
+        <div class="cart-empty" id="cart-empty"><span aria-hidden="true">✳</span><h3>Your bag is taking a breather.</h3><p>Find a little something to make your day.</p><button class="button button-dark" id="continue-shopping" type="button">Keep browsing</button></div>
+        <div class="cart-footer" id="cart-footer" hidden>
+            <p class="shipping-note" id="shipping-note"></p>
+            <div class="cart-total-row"><span>Subtotal</span><strong id="cart-subtotal">$0</strong></div>
+            <div class="cart-total-row"><span>Shipping</span><span id="cart-shipping">$0</span></div>
+            <div class="cart-total-row cart-grand-total"><span>Total</span><strong id="cart-total">$0</strong></div>
+            <button class="button button-dark checkout-button" id="checkout-button" type="button">Continue to checkout <span aria-hidden="true">↗</span></button>
+            <p class="demo-note">Demo checkout only — no payment is collected.</p>
+        </div>
+    </aside>
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
 </body>
 </html>
